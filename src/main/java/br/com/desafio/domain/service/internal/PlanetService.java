@@ -10,4 +10,5 @@ public interface PlanetService {
     PlanetDto getById(String id); 
     List<PlanetDto> list(); 
     Planet save(PlanetDto planetDto);
+    boolean delete(String id);
 }

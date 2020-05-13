@@ -47,5 +47,14 @@ public class PlanetServiceImpl implements PlanetService {
     public Planet save(PlanetDto planetDto) {
 		Planet planet = repository.save(mapper.map(planetDto, Planet.class));
 		return planet;
+    }
+    
+    public boolean delete(String id) {
+		boolean exists = repository.existsById(id);
+		if(exists) {
+			repository.deleteById(id);
+			return exists;
+		}
+        return false;
 	}
 }

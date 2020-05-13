@@ -42,5 +42,10 @@ public class PlanetServiceImpl implements PlanetService {
 			return mapper.map(repository.findById(id).get(), PlanetDto.class);
 		else 
 			return null;
+    }
+    
+    public Planet save(PlanetDto planetDto) {
+		Planet planet = repository.save(mapper.map(planetDto, Planet.class));
+		return planet;
 	}
 }

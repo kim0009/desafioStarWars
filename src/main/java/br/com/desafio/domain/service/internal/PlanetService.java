@@ -8,6 +8,7 @@ import java.util.List;
 public interface PlanetService {
     String teste();
     PlanetDto getById(String id); 
+    PlanetDto getByName(String nome);
     List<PlanetDto> list(); 
     Planet save(PlanetDto planetDto);
     boolean delete(String id);

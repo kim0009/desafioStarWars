@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.desafio.domain.dto.internal.PlanetDto;
@@ -25,6 +27,16 @@ public class PlanetController {
     @GetMapping("teste")
     public ResponseEntity<String> test() {
         return new ResponseEntity<String>(planetService.teste(), HttpStatus.OK);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<ResponseDto> getById(@PathVariable("id") String id) {
+        return new ResponseEntity<ResponseDto>(new ResponseDto(planetService.getById(id)), HttpStatus.OK);
+    }
+    
+    @GetMapping("nome/{nome}")
+    public ResponseEntity<ResponseDto> getByName(@PathVariable("nome") String name) {
+        return new ResponseEntity<ResponseDto>(new ResponseDto(planetService.getByName(name)), HttpStatus.OK);
     }
 
     @GetMapping()

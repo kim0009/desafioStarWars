@@ -44,6 +44,13 @@ public class PlanetServiceImpl implements PlanetService {
 			return null;
     }
     
+    public PlanetDto getByName(String name) {
+		if(repository.existsByNome(name))
+			return mapper.map(repository.findByNome(name), PlanetDto.class);
+		else 
+			return null;
+    }
+    
     public Planet save(PlanetDto planetDto) {
 		Planet planet = repository.save(mapper.map(planetDto, Planet.class));
 		return planet;

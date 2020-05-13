@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.desafio.domain.dto.internal.PlanetDto;
+import br.com.desafio.domain.dto.internal.ResponseDto;
 import br.com.desafio.domain.service.internal.PlanetService;
 
 @RestController
@@ -24,8 +27,13 @@ public class PlanetController {
         return new ResponseEntity<String>(planetService.teste(), HttpStatus.OK);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAll() {
-        return new ResponseEntity<List<PlanetDto>>(planetService.list(), HttpStatus.OK);
+    @GetMapping()
+    public ResponseEntity<ResponseDto> getAll() {
+        return new ResponseEntity<ResponseDto>((new ResponseDto(planetService.list())), HttpStatus.OK);
+    }
+
+    @PostMapping()
+    public ResponseEntity<ResponseDto> save(@RequestBody PlanetDto planet) {
+        return new ResponseEntity<ResponseDto>((new ResponseDto(planetService.save(planet))), HttpStatus.CREATED);
     }
 }

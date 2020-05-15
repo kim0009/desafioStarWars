@@ -5,7 +5,7 @@ import br.com.desafio.infrastructure.model.Planet;
 
 import java.util.List;
 
-public interface PlanetService {
+public interface PlanetInternalService {
     String teste();
     PlanetDto getById(String id); 
     PlanetDto getByName(String nome);

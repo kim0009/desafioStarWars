@@ -16,6 +16,12 @@ public class ResponseDto {
         this.message = message;
     }
     
+    public ResponseDto(Object data, String message) {
+        this.data = data;
+        this.sucess = true;
+        this.message = message;
+    }
+    
     public ResponseDto(Object data, boolean sucess) {
         this.data = data;
         this.sucess = sucess;

@@ -63,7 +63,7 @@ public class PlanetController {
     @PostMapping()
     public ResponseEntity<ResponseDto> save(@RequestBody PlanetDto planet) {
         try {
-            return new ResponseEntity<ResponseDto>((new ResponseDto(planetInternalService.save(planet))), HttpStatus.CREATED);
+            return new ResponseEntity<ResponseDto>((new ResponseDto(planetInternalService.save(planet), ApiMessage.SAVE_SUCESS_MESSAGE)), HttpStatus.CREATED);
         } catch (Exception ex) {
             if(ex instanceof MappingException)
                 throw new ApiException(ApiMessage.API_INTERNAL_ERROR_MESSAGE);
@@ -75,7 +75,7 @@ public class PlanetController {
     @DeleteMapping("{id}")
     public ResponseEntity<ResponseDto> delete(@PathVariable("id") String id) {
         try {
-            return new ResponseEntity<ResponseDto>((new ResponseDto(planetInternalService.delete(id))), HttpStatus.OK);
+            return new ResponseEntity<ResponseDto>((new ResponseDto(planetInternalService.delete(id), ApiMessage.DELETE_SUCESS_MESSAGE)), HttpStatus.OK);
         } catch (Exception ex) {
             throw new DeleteException(ApiMessage.DELETE_ERROR_MESSAGE);
         }

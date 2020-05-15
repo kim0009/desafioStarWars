@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.http.ResponseEntity.ok;
 
 import br.com.desafio.domain.dto.internal.PlanetDto;
 import br.com.desafio.domain.dto.internal.ResponseDto;
@@ -24,15 +26,16 @@ import br.com.desafio.exceptions.SaveException;
 import br.com.desafio.utils.ApiMessage;
 
 @RestController
-@RequestMapping("/api/planet/")
+@RequestMapping("/api/planet")
 public class PlanetController {
+
+    private Logger logger = LogManager.getLogger(getClass());
 
 	@Autowired
 	private PlanetInternalService planetInternalService;
     
     @GetMapping("teste")
     public ResponseEntity<String> test() {
-        Logger logger = LogManager.getLogger(getClass());
         logger.info("Teste de aplicação");
         return new ResponseEntity<String>(planetInternalService.teste(), HttpStatus.OK);
     }
@@ -40,42 +43,38 @@ public class PlanetController {
     @GetMapping("{id}")
     public ResponseEntity<ResponseDto> getById(@PathVariable("id") String id) {
         try {
-            Logger logger = LogManager.getLogger(getClass());
             logger.info("GetById");
-            return new ResponseEntity<ResponseDto>(new ResponseDto(planetInternalService.getById(id)), HttpStatus.OK);
+            return ok(new ResponseDto(planetInternalService.getById(id)));
         } catch (Exception ex) {
             throw new NoDataException(ApiMessage.SEARCH_ERROR_MESSAGE);
         }
     }
-    
+
     @GetMapping("nome/{nome}")
     public ResponseEntity<ResponseDto> getByName(@PathVariable("nome") String name) {
         try {
-            Logger logger = LogManager.getLogger(getClass());
             logger.info("GetByName");
-            return new ResponseEntity<ResponseDto>(new ResponseDto(planetInternalService.getByName(name)), HttpStatus.OK);
+            return ok(new ResponseDto(planetInternalService.getByName(name)));
         } catch (Exception ex) {
             throw new NoDataException(ApiMessage.SEARCH_ERROR_MESSAGE);
         }
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<ResponseDto> getAll() {
         try {       
-            Logger logger = LogManager.getLogger(getClass());
             logger.info("GetAll");
-            return new ResponseEntity<ResponseDto>((new ResponseDto(planetInternalService.list())), HttpStatus.OK);
+            return ok(new ResponseDto(planetInternalService.list()));
         } catch (Exception ex) {
             throw new NoDataException(ApiMessage.SEARCH_ERROR_MESSAGE);
         }
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ResponseDto> save(@RequestBody PlanetDto planet) {
         try {
-            Logger logger = LogManager.getLogger(getClass());
             logger.info("Save");
-            return new ResponseEntity<ResponseDto>((new ResponseDto(planetInternalService.save(planet), ApiMessage.SAVE_SUCESS_MESSAGE)), HttpStatus.CREATED);
+            return status(HttpStatus.CREATED).body(new ResponseDto(planetInternalService.save(planet)));
         } catch (Exception ex) {
             if(ex instanceof MappingException)
                 throw new ApiException(ApiMessage.API_INTERNAL_ERROR_MESSAGE);
@@ -87,9 +86,8 @@ public class PlanetController {
     @DeleteMapping("{id}")
     public ResponseEntity<ResponseDto> delete(@PathVariable("id") String id) {
         try {
-            Logger logger = LogManager.getLogger(getClass());
             logger.info("Delete");
-            return new ResponseEntity<ResponseDto>((new ResponseDto(planetInternalService.delete(id), ApiMessage.DELETE_SUCESS_MESSAGE)), HttpStatus.OK);
+            return ok(new ResponseDto(planetInternalService.delete(id), ApiMessage.DELETE_SUCESS_MESSAGE));
         } catch (Exception ex) {
             throw new DeleteException(ApiMessage.DELETE_ERROR_MESSAGE);
         }

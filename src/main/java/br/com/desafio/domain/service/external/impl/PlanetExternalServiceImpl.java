@@ -35,21 +35,39 @@ public class PlanetExternalServiceImpl implements PlanetExternalService {
     }
 
     public List<PlanetDto> getCountFilms(List<PlanetDto> listPlanetDto) {
-        List<PlanetExternalDto> listPlanetExternalDto = getFilmsByPlanet();
-        for(PlanetDto planetDto: listPlanetDto)
-            planetDto.setQtdAparicaoEmFilmes(getCountFilms(planetDto, listPlanetExternalDto));
+        CompletableFuture<List<ResponseSwApiExternalDto>> allCompleteFuture = getFilmsByPlanet();
+        allCompleteFuture.thenAcceptAsync(response -> {
+            List<PlanetExternalDto> listPlanetExternalDto = new ArrayList<PlanetExternalDto>();
 
+            for(ResponseSwApiExternalDto responseSwApiExternalDto : response) {
+                listPlanetExternalDto.addAll(responseSwApiExternalDto.getResults());
+            }
+
+            for(PlanetDto planetDto: listPlanetDto)
+                planetDto.setQtdAparicaoEmFilmes(getCountFilms(planetDto, listPlanetExternalDto));
+        });
+
+        allCompleteFuture.join();
         return listPlanetDto;
     }
     
     public PlanetDto getCountFilms(PlanetDto planetDto) {
-        List<PlanetExternalDto> listPlanetExternalDto = getFilmsByPlanet();
-        planetDto.setQtdAparicaoEmFilmes(getCountFilms(planetDto, listPlanetExternalDto));
+        CompletableFuture<List<ResponseSwApiExternalDto>> allCompleteFuture = getFilmsByPlanet();
+        allCompleteFuture.thenAcceptAsync(response -> {
+            List<PlanetExternalDto> listPlanetExternalDto = new ArrayList<PlanetExternalDto>();
+
+            for(ResponseSwApiExternalDto responseSwApiExternalDto : response) {
+                listPlanetExternalDto.addAll(responseSwApiExternalDto.getResults());
+            }
+            planetDto.setQtdAparicaoEmFilmes(getCountFilms(planetDto, listPlanetExternalDto));
+        });
+
+        allCompleteFuture.join();
         return planetDto;
     }
 
     @Async
-    public List<PlanetExternalDto> getFilmsByPlanet() {
+    public CompletableFuture<List<ResponseSwApiExternalDto>> getFilmsByPlanet() {
         try {
             List<CompletableFuture<ResponseSwApiExternalDto>> futures = new ArrayList<CompletableFuture<ResponseSwApiExternalDto>>();
             List<PlanetExternalDto> listPlanetExternalDto = new ArrayList<PlanetExternalDto>();
@@ -78,9 +96,8 @@ public class PlanetExternalServiceImpl implements PlanetExternalService {
                     listPlanetExternalDto.addAll(responseSwApiExternalDto.getResults());
                 }
             });
-            
-            allCompleteFuture.join();
-            return listPlanetExternalDto;
+
+            return allCompleteFuture;
         } catch (Exception e) {
             throw new SwApiException(ApiMessage.SW_API_ERROR_MESSAGE);
         }

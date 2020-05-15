@@ -45,8 +45,10 @@ public class PlanetInteralServiceImpl implements PlanetInternalService {
 	}
 
 	public PlanetDto getById(String id) {
-        if(repository.existsById(id))
-            return mapper.map(repository.findById(id).get(), PlanetDto.class);
+        if(repository.existsById(id)) {
+            PlanetDto planetDto = mapper.map(repository.findById(id).get(), PlanetDto.class);
+            return planetExternalService.getCountFilms(planetDto);
+        }
         else 
             return null;
     }
@@ -61,7 +63,6 @@ public class PlanetInteralServiceImpl implements PlanetInternalService {
     }
     
     public Planet save(PlanetDto planetDto) {
-
         Planet planet = repository.save(mapper.map(planetDto, Planet.class));
         return planet;
     }

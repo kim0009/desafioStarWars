@@ -62,9 +62,10 @@ public class PlanetInteralServiceImpl implements PlanetInternalService {
             return null;
     }
     
-    public Planet save(PlanetDto planetDto) {
+    public PlanetDto save(PlanetDto planetDto) {
         Planet planet = repository.save(mapper.map(planetDto, Planet.class));
-        return planet;
+        planetDto.setId(planet.getId());
+        return planetDto;
     }
     
     public boolean delete(String id) {

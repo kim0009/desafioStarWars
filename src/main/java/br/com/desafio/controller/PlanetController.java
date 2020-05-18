@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.ResponseEntity.status;
 import static org.springframework.http.ResponseEntity.ok;
 
+import javax.validation.Valid;
+
+
 import br.com.desafio.domain.dto.internal.PlanetDto;
 import br.com.desafio.domain.dto.internal.ResponseDto;
 import br.com.desafio.domain.service.internal.PlanetInternalService;
@@ -37,7 +40,7 @@ public class PlanetController {
     @GetMapping("teste")
     public ResponseEntity<String> test() {
         logger.info("Teste de aplicação");
-        return new ResponseEntity<String>(planetInternalService.teste(), HttpStatus.OK);
+        return ok(planetInternalService.teste());
     }
 
     @GetMapping("{id}")
@@ -71,7 +74,7 @@ public class PlanetController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto> save(@RequestBody PlanetDto planet) {
+    public ResponseEntity<ResponseDto> save(@Valid @RequestBody PlanetDto planet) {
         try {
             logger.info("Save");
             return status(HttpStatus.CREATED).body(new ResponseDto(planetInternalService.save(planet)));

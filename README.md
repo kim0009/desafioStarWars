@@ -1,4 +1,8 @@
 # desafioStarWars
+Link da aplicação rodando no heroku:
+```
+https://desafio-swapi.herokuapp.com/api/planet
+```
 ### Endpoints
 #### Para buscar todos os items:
 ```

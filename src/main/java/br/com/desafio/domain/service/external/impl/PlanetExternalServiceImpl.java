@@ -1,6 +1,7 @@
 package br.com.desafio.domain.service.external.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -69,13 +70,13 @@ public class PlanetExternalServiceImpl implements PlanetExternalService {
     @Async
     public CompletableFuture<List<ResponseSwApiExternalDto>> getFilmsByPlanet() {
         try {
-            List<CompletableFuture<ResponseSwApiExternalDto>> futures = new ArrayList<CompletableFuture<ResponseSwApiExternalDto>>();
-            List<PlanetExternalDto> listPlanetExternalDto = new ArrayList<PlanetExternalDto>();
-            futures.add(CompletableFuture
-                    .supplyAsync(() -> apiIntegration.getPlanets(1)));
-    
+            List<CompletableFuture<ResponseSwApiExternalDto>> futures = Arrays.asList(
+                CompletableFuture
+                    .supplyAsync(() -> apiIntegration.getPlanets(1))
+            );
+
             futures.get(0).thenAcceptAsync(response -> {
-                int countPages = response.getCount() / listPlanetExternalDto.size();
+                int countPages = response.getCount() / response.getResults().size();
                 for(int i = 2; i <= countPages; i++) {
                     final int page = i;
                     futures.add(CompletableFuture
@@ -90,12 +91,6 @@ public class PlanetExternalServiceImpl implements PlanetExternalService {
                             .map(x -> x.join()) 
                             .collect(Collectors.<ResponseSwApiExternalDto>toList())
             );
-    
-            allCompleteFuture.thenAcceptAsync(response -> {
-                for(ResponseSwApiExternalDto responseSwApiExternalDto : response) {
-                    listPlanetExternalDto.addAll(responseSwApiExternalDto.getResults());
-                }
-            });
 
             return allCompleteFuture;
         } catch (Exception e) {

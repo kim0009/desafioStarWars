@@ -14,7 +14,7 @@ https://desafio-swapi.herokuapp.com/api/planet/{id}
 ```
 #### Para buscar pelo nome:
 ```
-http://localhost:8080/api/planet/nome/{nome}
+https://desafio-swapi.herokuapp.com/planet/nome/{nome}
 ```
 #### Para salvar um item:
 ```

@@ -77,7 +77,7 @@ public class PlanetController {
     public ResponseEntity<ResponseDto> save(@Valid @RequestBody PlanetDto planet) {
         try {
             logger.info("Save");
-            return status(HttpStatus.CREATED).body(new ResponseDto(planetInternalService.save(planet)));
+            return status(HttpStatus.CREATED).body(new ResponseDto(planetInternalService.save(planet), ApiMessage.SAVE_SUCESS_MESSAGE));
         } catch (Exception ex) {
             if(ex instanceof MappingException)
                 throw new ApiException(ApiMessage.API_INTERNAL_ERROR_MESSAGE);

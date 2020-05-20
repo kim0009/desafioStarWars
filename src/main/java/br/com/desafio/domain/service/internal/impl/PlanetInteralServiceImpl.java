@@ -65,7 +65,7 @@ public class PlanetInteralServiceImpl implements PlanetInternalService {
     public PlanetDto save(PlanetDto planetDto) {
         Planet planet = repository.save(mapper.map(planetDto, Planet.class));
         planetDto.setId(planet.getId());
-        return planetDto;
+        return planetExternalService.getCountFilms(planetDto);
     }
     
     public boolean delete(String id) {

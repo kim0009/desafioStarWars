@@ -53,19 +53,6 @@ public class PlanetExternalServiceImpl implements PlanetExternalService {
         return planetDto;
     }
 
-    public List<PlanetExternalDto> teste() {
-        ResponseSwApiExternalDto responseSwApiExternalDto = apiIntegration.getPlanets(1);
-        List<PlanetExternalDto> listPlanetExternalDto = new ArrayList<PlanetExternalDto>();
-        listPlanetExternalDto.addAll(responseSwApiExternalDto.getResults());
-        int countPages = responseSwApiExternalDto.getCount() / listPlanetExternalDto.size();
-
-        for(int i = 2; i <= countPages; i++) {
-            final int page = i;
-            listPlanetExternalDto.addAll(apiIntegration.getPlanets(page).getResults());
-        }
-        return listPlanetExternalDto;
-    }
-
     @Async
     public CompletableFuture<List<PlanetExternalDto>> getAllPlanets() {
         try {
